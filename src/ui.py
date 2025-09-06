@@ -229,6 +229,10 @@ def main():
         st.header("🔄 Duplicate Files")
         display_duplicates()
     
+    # Quarantine Management section
+    st.header("🛡️ Quarantine Management")
+    display_quarantine_management()
+    
     # Footer
     st.markdown("---")
     st.markdown("🔒 **Privacy First**: All processing happens locally on your machine. No data is sent to external services.")
@@ -385,13 +389,121 @@ def display_duplicates():
             st.dataframe(file_df, use_container_width=True)
             
             # Action buttons for each duplicate group
-            col1, col2 = st.columns(2)
+            col1, col2, col3 = st.columns(3)
             with col1:
-                if st.button(f"🗑️ Move to Quarantine", key=f"quarantine_{hash_value}"):
-                    st.info("Quarantine functionality will be implemented in the next version.")
+                if st.button(f"🗑️ Quarantine All", key=f"quarantine_all_{hash_value}"):
+                    try:
+                        utils = FileUtils()
+                        quarantined_files = []
+                        for file_info in files:
+                            quarantined_path = utils.safe_move_to_quarantine(
+                                file_info['path'], 
+                                f"duplicates_{hash_value[:8]}"
+                            )
+                            quarantined_files.append(quarantined_path)
+                        
+                        st.success(f"✅ Moved {len(quarantined_files)} files to quarantine!")
+                        st.info(f"Files moved to: quarantine/duplicates_{hash_value[:8]}/")
+                        
+                        # Refresh the page to update the duplicate list
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"❌ Error moving files to quarantine: {e}")
+            
             with col2:
-                if st.button(f"📋 Select Files", key=f"select_{hash_value}"):
-                    st.info("File selection functionality will be implemented in the next version.")
+                if st.button(f"🗑️ Quarantine Selected", key=f"quarantine_selected_{hash_value}"):
+                    st.info("Select files in the table above, then use this button.")
+            
+            with col3:
+                if st.button(f"📋 View Details", key=f"view_{hash_value}"):
+                    st.info(f"Hash: {hash_value}")
+                    st.info(f"Files: {len(files)}")
+                    total_size = sum(f['size'] for f in files)
+                    st.info(f"Total size: {total_size / (1024*1024):.1f} MB")
+
+
+def display_quarantine_management():
+    """Display quarantine management interface."""
+    utils = FileUtils()
+    
+    # Check if quarantine directory exists
+    if not os.path.exists(utils.quarantine_dir):
+        st.info("No quarantine directory found. Files will be moved here when quarantined.")
+        return
+    
+    # Get all quarantined files
+    quarantined_files = []
+    for root, dirs, files in os.walk(utils.quarantine_dir):
+        for file in files:
+            file_path = os.path.join(root, file)
+            relative_path = os.path.relpath(file_path, utils.quarantine_dir)
+            quarantined_files.append({
+                'path': file_path,
+                'relative_path': relative_path,
+                'size': os.path.getsize(file_path),
+                'modified': os.path.getmtime(file_path)
+            })
+    
+    if not quarantined_files:
+        st.info("No files in quarantine.")
+        return
+    
+    st.write(f"**Found {len(quarantined_files)} files in quarantine**")
+    
+    # Display quarantined files
+    for i, file_info in enumerate(quarantined_files):
+        with st.expander(f"📁 {file_info['relative_path']} ({file_info['size'] / (1024*1024):.1f} MB)"):
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                if st.button(f"🔄 Restore", key=f"restore_{i}"):
+                    try:
+                        # For now, restore to a "restored" subdirectory
+                        restored_path = os.path.join("restored", file_info['relative_path'])
+                        os.makedirs(os.path.dirname(restored_path), exist_ok=True)
+                        utils.restore_from_quarantine(file_info['path'], restored_path)
+                        st.success(f"✅ File restored to: {restored_path}")
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"❌ Error restoring file: {e}")
+            
+            with col2:
+                if st.button(f"🗑️ Delete Permanently", key=f"delete_{i}"):
+                    try:
+                        os.remove(file_info['path'])
+                        st.success("✅ File deleted permanently")
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"❌ Error deleting file: {e}")
+            
+            with col3:
+                if st.button(f"📋 Info", key=f"info_{i}"):
+                    st.write(f"**Original Path:** {file_info['relative_path']}")
+                    st.write(f"**Size:** {file_info['size'] / (1024*1024):.1f} MB")
+                    st.write(f"**Modified:** {pd.to_datetime(file_info['modified'], unit='s').strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    # Bulk actions
+    st.subheader("Bulk Actions")
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if st.button("🗑️ Clear All Quarantine"):
+            try:
+                import shutil
+                shutil.rmtree(utils.quarantine_dir)
+                os.makedirs(utils.quarantine_dir)
+                st.success("✅ Quarantine cleared")
+                st.rerun()
+            except Exception as e:
+                st.error(f"❌ Error clearing quarantine: {e}")
+    
+    with col2:
+        if st.button("📊 Generate Quarantine Report"):
+            try:
+                report = utils.create_quarantine_report([f['path'] for f in quarantined_files])
+                st.text_area("Quarantine Report", report, height=200)
+            except Exception as e:
+                st.error(f"❌ Error generating report: {e}")
 
 
 if __name__ == "__main__":
