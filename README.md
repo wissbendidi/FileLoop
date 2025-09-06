@@ -2,17 +2,17 @@
 
 A privacy-focused, local AI-powered file cleaner that helps you organize and clean up your computer files without uploading anything to the cloud.
 
-## ✨ Features
+##  Features
 
-- 🔍 **Smart File Scanning**: Collects metadata for all files (path, size, timestamps, etc.)
-- 🤖 **AI-Powered Classification**: Uses local embeddings to cluster and classify files
-- 📊 **Interactive Visualization**: Beautiful treemap and sunburst charts to explore your files
-- 🔒 **Privacy-First**: All processing happens locally - no cloud APIs, no file uploads
-- 🛡️ **Safe Operations**: Files are moved to quarantine folders, never deleted directly
-- 🔍 **Duplicate Detection**: Find duplicate files using SHA256/MD5 hashing
-- 📱 **Modern UI**: Clean, interactive Streamlit interface
+-  **Smart File Scanning**: Collects metadata for all files (path, size, timestamps, etc.)
+-  **AI-Powered Classification**: Uses local embeddings to cluster and classify files
+-  **Interactive Visualization**: Beautiful treemap and sunburst charts to explore your files
+-  **Privacy-First**: All processing happens locally - no cloud APIs, no file uploads
+-  **Safe Operations**: Files are moved to quarantine folders, never deleted directly
+-  **Duplicate Detection**: Find duplicate files using SHA256/MD5 hashing
 
-## 🚀 Quick Start
+
+##  Quick Start
 
 ### Option 1: Using uv (Recommended)
 
@@ -46,7 +46,7 @@ streamlit run src/ui.py
 
 3. **Open your browser** and navigate to the URL shown in the terminal (usually `http://localhost:8501`)
 
-## 📖 Usage Guide
+##  Usage Guide
 
 ### Basic Workflow
 
@@ -66,30 +66,14 @@ streamlit run src/ui.py
 - **Cluster Analysis**: AI-powered grouping of similar files
 - **Duplicate Detection**: Find and manage duplicate files safely
 
-## 🔒 Privacy & Safety
+##  Privacy & Safety
 
 - **100% Local Processing**: All AI analysis happens on your machine
 - **No Data Upload**: Files never leave your computer
 - **Safe Operations**: Files are moved to quarantine, never deleted directly
 - **Review Before Action**: Always review files before any cleanup operations
 
-## 🛠️ Development
 
-### Project Structure
-```
-FileLoop/
-├── src/
-│   ├── scanner.py          # File scanning and metadata collection
-│   ├── embeddings.py       # Local AI embedding generation
-│   ├── classifier.py       # File clustering and classification
-│   ├── visualization.py    # Interactive charts and plots
-│   ├── utils.py            # File operations and duplicate detection
-│   └── ui.py               # Streamlit web interface
-├── tests/                  # Unit tests
-├── data/                   # Example/test files
-├── models/                 # Local ML models
-└── requirements.txt        # Python dependencies
-```
 
 ### Running Tests
 
@@ -113,9 +97,9 @@ pytest tests/
 3. Write tests for new functionality
 4. Update this README with new features
 
-## 📋 Current Status
+##  Current Status
 
-✅ **Completed:**
+**Completed:**
 - File scanning and metadata collection
 - Local AI embedding generation
 - File clustering and classification
@@ -124,14 +108,14 @@ pytest tests/
 - Streamlit web interface
 - Basic safety features (quarantine system)
 
-🚧 **In Progress:**
+**In Progress:**
 - Content extraction for PDFs and documents
 - Enhanced safety features
 - Export functionality (CSV/JSON)
 - Search functionality
 - Performance optimizations
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -139,13 +123,6 @@ pytest tests/
 4. Add tests for new functionality
 5. Submit a pull request
 
-## 📄 License
+## License
 
 See LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- [SentenceTransformers](https://www.sbert.net/) for local embedding models
-- [Streamlit](https://streamlit.io/) for the web interface
-- [Plotly](https://plotly.com/) for interactive visualizations
-- [scikit-learn](https://scikit-learn.org/) for machine learning algorithms
