@@ -1,0 +1,80 @@
+# ================================
+# PROJECT CONTEXT
+# ================================
+- We are building a **local AI-powered file cleaner**.
+- Goal: Help users clean up their computer by scanning files, classifying them with AI, and showing results in an interactive UI.
+- All processing must run locally. ❌ No cloud APIs. ❌ Never upload user files to the internet.
+- The tool should be **safe, private, modular, and easy to share**.
+
+# ================================
+# CORE FEATURES
+# ================================
+- Scan directories to collect file metadata:
+  - path, name, extension, size, last accessed/modified time
+- Generate embeddings using a local model (e.g. SentenceTransformers `all-MiniLM-L6-v2`).
+- Cluster or classify files into categories:
+  - By type (images, videos, docs, code, audio, etc.)
+  - By usage (large, old, rarely accessed, duplicates)
+- Interactive visualization:
+  - Show file clusters with treemaps / sunburst charts
+  - Allow filters (by size, type, cluster)
+- Interactive UI with **Streamlit**:
+  - Directory selection
+  - File cluster display
+  - Suggested cleanup actions
+- Safety:
+  - Never delete files directly
+  - Instead, move files to a "quarantine" folder where user can review later
+
+# ================================
+# NICE-TO-HAVE FEATURES
+# ================================
+- Detect duplicate files via hashing (SHA256/MD5).
+- AI-generated labels for clusters (optional local LLM).
+- Gamification (e.g., “You freed 2GB 🎉”).
+- Export results as CSV/JSON.
+- Simple search bar to locate files quickly.
+
+# ================================
+# TECH STACK
+# ================================
+- Python 3.10+
+- Libraries:
+  - `os`, `time`, `hashlib` → file scanning + duplicates
+  - `sentence-transformers` → embeddings
+  - `scikit-learn` → clustering (KMeans, DBSCAN)
+  - `pandas` → data handling
+  - `plotly` → visualization (treemap, sunburst)
+  - `streamlit` → interactive UI
+  - `PyPDF2`, `python-docx` → extract content from PDFs/Docs
+- Testing: `pytest`
+
+# ================================
+# ARCHITECTURE
+# ================================
+FileLoop
+│── README.md               # Instructions
+│── requirements.txt        # Dependencies
+│── cursor.rules            # This file
+│── src/
+│   ├── scanner.py          # File scanning
+│   ├── embeddings.py       # Embedding generation
+│   ├── classifier.py       # File clustering/classification
+│   ├── visualization.py    # Treemap/sunburst charts
+│   ├── ui.py               # Streamlit app
+│   └── utils.py            # Helpers (hashing, file ops)
+│── data/                   # Example/test files
+│── models/                 # Local ML models (if downloaded)
+└── tests/                  # Unit tests
+
+# ================================
+# DEVELOPMENT RULES
+# ================================
+- Always use type hints and docstrings.
+- Keep modules small and modular.
+- When writing code, also generate example usage.
+- Avoid hardcoding paths → always let user select a directory.
+- Ensure safety: files are only moved to quarantine, not deleted.
+- Write pytest tests for each core module.
+- Use Plotly for charts; never matplotlib for Streamlit integration.
+- Prioritize performance → scanning and clustering should handle thousands of files.
