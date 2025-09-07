@@ -36,7 +36,7 @@ uv run streamlit run src/ui.py
 
 1. **Install dependencies:**
 ```bash
-pip install -r requirements.txt
+pip install .
 ```
 
 2. **Run the application:**
