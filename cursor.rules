@@ -18,10 +18,10 @@
 - Interactive visualization:
   - Show file clusters with treemaps / sunburst charts
   - Allow filters (by size, type, cluster)
-- Interactive UI with **Streamlit**:
-  - Directory selection
-  - File cluster display
-  - Suggested cleanup actions
+- Single-page **chat UI** (FastAPI + vanilla JS):
+  - Folder path input or browse directories
+  - Build content index, then chat about files (content-aware search)
+  - Optional Ollama for natural-language answers
 - Safety:
   - Never delete files directly
   - Instead, move files to a "quarantine" folder where user can review later
@@ -45,7 +45,7 @@
   - `scikit-learn` → clustering (KMeans, DBSCAN)
   - `pandas` → data handling
   - `plotly` → visualization (treemap, sunburst)
-  - `streamlit` → interactive UI
+  - `fastapi`, `uvicorn` → web app and chat API
   - `PyPDF2`, `python-docx` → extract content from PDFs/Docs
 - Testing: `pytest`
 
@@ -61,7 +61,8 @@ FileLoop
 │   ├── embeddings.py       # Embedding generation
 │   ├── classifier.py       # File clustering/classification
 │   ├── visualization.py    # Treemap/sunburst charts
-│   ├── ui.py               # Streamlit app
+│   ├── app.py              # FastAPI app + chat API
+│   ├── static/             # Chat UI (index.html)
 │   └── utils.py            # Helpers (hashing, file ops)
 │── data/                   # Example/test files
 │── models/                 # Local ML models (if downloaded)
@@ -76,5 +77,5 @@ FileLoop
 - Avoid hardcoding paths → always let user select a directory.
 - Ensure safety: files are only moved to quarantine, not deleted.
 - Write pytest tests for each core module.
-- Use Plotly for charts; never matplotlib for Streamlit integration.
+- Use Plotly for charts when needed (e.g. library code); UI is a single chat page.
 - Prioritize performance → scanning and clustering should handle thousands of files.

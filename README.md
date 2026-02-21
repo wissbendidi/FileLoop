@@ -4,12 +4,11 @@ A privacy-focused, local AI-powered file cleaner that helps you organize and cle
 
 ##  Features
 
--  **Smart File Scanning**: Collects metadata for all files (path, size, timestamps, etc.)
--  **AI-Powered Classification**: Uses local embeddings to cluster and classify files
--  **Interactive Visualization**: Beautiful treemap and sunburst charts to explore your files
--  **Privacy-First**: All processing happens locally - no cloud APIs, no file uploads
--  **Safe Operations**: Files are moved to quarantine folders, never deleted directly
--  **Duplicate Detection**: Find duplicate files using SHA256/MD5 hashing
+-  **Chat about your files**: One chat interface (ChatGPT-style). Set a folder, build the index, then ask questions in natural language.
+-  **Content-aware search**: Results are based on the actual content of files (text, code, PDF, DOCX), not just metadata.
+-  **Browse or type path**: Enter a folder path or browse directories to choose what to index.
+-  **Privacy-first**: All processing runs locally; no cloud APIs, no file uploads.
+-  **Optional Ollama**: Use a local LLM (Ollama) for short answers in addition to relevant snippets.
 
 
 ##  Quick Start
@@ -23,48 +22,31 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 2. **Install dependencies and run:**
 ```bash
-# Sync dependencies
 uv sync
-
-# Run the application
-uv run streamlit run src/ui.py
+uv run fileloop
 ```
 
-3. **Open your browser** and navigate to the URL shown in the terminal (usually `http://localhost:8501`)
+3. **Open your browser** at **http://localhost:8501**
 
-### Option 2: Using pip (Legacy)
+### Option 2: Using pip
 
-1. **Install dependencies:**
 ```bash
-pip install -r requirements.txt
+pip install -e .
+fileloop
 ```
 
-2. **Run the application:**
-```bash
-streamlit run src/ui.py
-```
-
-3. **Open your browser** and navigate to the URL shown in the terminal (usually `http://localhost:8501`)
+Then open **http://localhost:8501**.
 
 ##  Usage Guide
 
-### Basic Workflow
+### Chat workflow
 
-1. **Select Directory**: Enter the path to the directory you want to analyze
-2. **Configure Options**: Choose which directories to exclude and clustering settings
-3. **Scan Files**: Click "Scan Directory" to collect file metadata
-4. **AI Analysis**: Click "Run AI Analysis" to cluster and classify files
-5. **Find Duplicates**: Click "Find Duplicates" to identify duplicate files
-6. **Explore Visualizations**: Use the interactive charts to understand your file organization
-7. **Clean Up**: Move files to quarantine for safe review (coming soon!)
+1. **Set folder**: Enter the path to the folder you want to analyze, or click **Browse** to pick it from a directory list.
+2. **Build index**: Click **Build index** to scan and index file contents (text, code, PDFs, DOCX). Wait until you see "Indexed N chunks".
+3. **Ask questions**: Type in the chat box (e.g. "Where is authentication handled?", "What config is used for the API?") and press Enter or **Send**.
+4. **Optional**: Check **Use Ollama for answers** to get a short natural-language answer from a local Ollama model in addition to the file snippets.
 
-### Features Overview
-
-- **File Statistics**: See total files, size, and category breakdown
-- **Treemap View**: Hierarchical visualization of your file organization
-- **Sunburst Chart**: Circular view of file categories and clusters
-- **Cluster Analysis**: AI-powered grouping of similar files
-- **Duplicate Detection**: Find and manage duplicate files safely
+All processing runs locally; nothing is sent to the cloud.
 
 ##  Privacy & Safety
 
@@ -100,20 +82,11 @@ pytest tests/
 ##  Current Status
 
 **Completed:**
-- File scanning and metadata collection
-- Local AI embedding generation
-- File clustering and classification
-- Interactive visualizations (treemap, sunburst, scatter plots)
-- Duplicate file detection
-- Streamlit web interface
-- Basic safety features (quarantine system)
-
-**In Progress:**
-- Content extraction for PDFs and documents
-- Enhanced safety features
-- Export functionality (CSV/JSON)
-- Search functionality
-- Performance optimizations
+- Content extraction (text, code, PDF, DOCX) and chunking
+- Local content index (in-memory or Chroma) and semantic search
+- Single-page chat UI (FastAPI + vanilla JS) with folder path and browse
+- Optional Ollama integration for natural-language answers
+- File scanning, embeddings, duplicate detection, and quarantine (library code; UI focused on chat)
 
 ## Contributing
 

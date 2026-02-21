@@ -25,4 +25,4 @@ uv run pytest
 
 # Start the application
 echo "🎯 Starting FileLoop application..."
-uv run streamlit run src/ui.py
+uv run fileloop
